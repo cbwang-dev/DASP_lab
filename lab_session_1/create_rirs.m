@@ -30,7 +30,7 @@ n = round(max(rev_time*1.2*fs_RIR,2*fs_RIR*max(L)/c));                     % Num
 n=n+rem(n,2);
 end
 
-disp('Computing RIRs... please wait until confirmation appears')
+% disp('Computing RIRs... please wait until confirmation appears')
 R=zeros(n,size(r,1),size(s,1));
 RIR_sources=zeros(n,size(r,1),size(s,1));
 for j=1:size(s,1)
@@ -89,7 +89,7 @@ if ~isempty(v_pos)
 else
     RIR_noise=[];
 end
-disp(['RIRs are ready for use in variable RIR, note that the RIRs are sampled at ' num2str(fs_RIR) ' Hz'])
-save('Computed_RIRs','RIR_sources','RIR_noise','fs_RIR','m_pos','s_pos','v_pos','room_dim','rev_time')
+% disp(['RIRs are ready for use in variable RIR, note that the RIRs are sampled at ' num2str(fs_RIR) ' Hz'])
+% save('Computed_RIRs','RIR_sources','RIR_noise','fs_RIR','m_pos','s_pos','v_pos','room_dim','rev_time')
 end
 
