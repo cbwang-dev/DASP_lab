@@ -28,7 +28,7 @@ Lh = length(h);
 % Calculate the appropriate value of Lx, the frame length of x,
 % given your nfft and Lh
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
+Lx = nfft - Lh + 1;
 
 H = fft(h, nfft);   % DFT of h
 H = H(:);           % make into a column vector (speed)
@@ -36,11 +36,28 @@ nx = length(x);     % total length of x
 y = zeros(nx,1);
 
 istart = 1;
-while istart <= nx
+y_s_old = zeros(nfft, 1);
+while istart <= nx-Lx
 
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     % Section of code to complete (5 - 10 lines) %
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+   
+    s = x(istart: istart + Lx -1, :);
+
+    S = fft(s, nfft);
+    Y_s = S.*H;
+    y_s = ifft(Y_s, nfft); 
+
+
+    y(istart: istart+Lh-2, :) = y_s(1:Lh-1, :) + y_s_old(end-Lh+2:end, :); % overlap
+    
+    core_len = nfft - 2*Lh + 2;
+    y(istart+Lh-1: istart + Lh + core_len-2, :) = y_s(Lh : Lh + core_len-1); % core block
+
+    y_s_old = y_s;
+    
+    istart = istart + Lx;
 
 end
 

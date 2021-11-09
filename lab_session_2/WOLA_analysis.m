@@ -28,17 +28,22 @@ N_half = nfft / 2 + 1;
 f = 0:(fs / 2) / (N_half - 1):fs / 2;
 
 % init
-L = floor((length(x) - nfft + (nfft / noverlap)) / (nfft / noverlap));
-M = size(x,2);
+L = floor((length(x) - nfft + (nfft / noverlap)) / (nfft / noverlap)); % number of frames
+M = size(x,2); % number of channels
 X = zeros(N_half, L, M);
-
+hop = nfft - nfft / noverlap;
 for m = 0:M-1
     for l = 0:L-1 % Frame index
 
         %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
         % Section of code to complete (3 - 5 lines) %
         %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
+        istart = l*hop + 1;
+        iend = istart + nfft;
+        s = x(start: end, m+1); % get a signal segment
+        s = seg.* window; % scale the signal segment by the window function
+        S = fft(s, N_half); % get the FFT of the signal segment
+        X(:, l+1, m+1) = S;
     end
 end
 
