@@ -96,10 +96,10 @@ end
 figure(1);title("Estimated and Real HRTFs without noise");hold on;
 subplot(3,1,1);plot(x_nonzero,'color','red');
 legend("x");
-title("Real HRTFs wothout noise");
+title("Real HRTFs without noise");
 subplot(3,1,2);plot(H_nonzero*g,'color','blue');
 legend("H*g");
-title("Estimated HRTFs wothout noise");
+title("Estimated HRTFs without noise");
 subplot(3,1,3);plot(H_nonzero*g-x_nonzero);
 legend("H*g-x")
 title("Difference between Real and Estimated HRTFs");

@@ -1,4 +1,5 @@
 clear;
+close all;
 siglength=5;
 nfft=512;
 J=5;
@@ -11,7 +12,7 @@ dirac_speech = OLA(source,dirac,nfft);
 figure(1);
 subplot(2,1,1);plot(source,'color','red');legend('speech');
 title("original speech signal");
-subplot(2,1,2);plot(dirac_speech,'color','blue');legend('dirac_speech');
+subplot(2,1,2);plot(dirac_speech,'color','blue');legend('dirac speech');
 title("filtered speech signal");
 synth_error=norm(dirac_speech-source);
 fprintf("Synthesis error is %d.(OLA Dirac scenario)\n",synth_error);
@@ -59,9 +60,12 @@ OLA_binaural=[mean(OLA_binaural_left,2) mean(OLA_binaural_right,2)];
 % disp("playing OLA based binaural");soundsc(OLA_binaural,fs);
 
 % Now look:
-figure();
-subplot(2,1,1);plot(conv_left);hold on;plot(conv_right);
+figure(2);
+subplot(2,1,1);plot(conv_left);;hold on;
+plot(conv_right);
 title("convolution based binaural");
+legend("left", "right");
 subplot(2,1,2);plot(OLA_binaural(:,1));hold on;
 plot(OLA_binaural(:,2));title("OLA based binaural");
+legend("left", "right");
 save("OLA_binaural_sound.mat","OLA_binaural")

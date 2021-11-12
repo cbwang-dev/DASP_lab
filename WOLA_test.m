@@ -1,4 +1,5 @@
 clear;
+close all;
 %% hyperparameter and audio definition
 [source, fs] =audioread('audio_files/speech1.wav');
 siglength = 5;
@@ -36,17 +37,21 @@ end
 WOLA_binaural = [mean(x_left,2) mean(x_right,2)];
 
 % Look!
-figure();load SOE_binaural_sound_fs;
+figure(3);load SOE_binaural_sound_fs;
 subplot(3,1,1);plot(WOLA_binaural(:,1));hold on;
 plot(WOLA_binaural(:,2));title("WOLA based binaural");
+legend("left", "right");
 subplot(3,1,2);plot(estimated_binaural(:,1));hold on;
 plot(estimated_binaural(:,2));title("SOE binaural");
+legend("left", "right");
 load OLA_binaural_sound;subplot(3,1,3);
 plot(OLA_binaural(:,1));hold on;
 plot(OLA_binaural(:,2));title("OLA based binaural");
+legend("left", "right");
+
 
 % Listen!
-load SOE_binaural_sound_fs;
-disp("playing SOE estimated binaural (from session 1)");soundsc(estimated_binaural,fs);pause;
-disp("playing WOLA estimated binaural");soundsc(WOLA_binaural,fs);pause;
-load OLA_binaural_sound;disp("playing OLA based binaural");soundsc(OLA_binaural,fs);
+% load SOE_binaural_sound_fs;
+% disp("playing SOE estimated binaural (from session 1)");soundsc(estimated_binaural,fs);pause;
+% disp("playing WOLA estimated binaural");soundsc(WOLA_binaural,fs);pause;
+% load OLA_binaural_sound;disp("playing OLA based binaural");soundsc(OLA_binaural,fs);
