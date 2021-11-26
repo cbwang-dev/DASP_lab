@@ -1,5 +1,4 @@
-# CPAEP_lab
-Code for Compute Platforms for AI and Embedded Process, lab session. 
+# DASP
 
 ## Exercise Session 1
 
