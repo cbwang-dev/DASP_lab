@@ -7,7 +7,7 @@
 % complete
 
 
-function [X,f] = WOLA_analysis(x,fs,window,nfft,noverlap,g)
+function [X,f] = WOLA_analysis(x,fs,window,nfft,noverlap)
 %WOLA_analysis  short-time fourier transform
 % INPUT:
 %   x           : input time signal(s) (samples x channels)
@@ -37,8 +37,8 @@ hop = nfft - nfft / noverlap;
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Section of code for binaural %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-G=fft(g,nfft); %512 5
-G_half=G(1:N_half,:); %Use only half FFT spectrum
+% G=fft(g,nfft); %512 5
+% G_half=G(1:N_half,:); %Use only half FFT spectrum
 
 for m = 0:M-1 % channel index
     for l = 0:L-1 % Frame index
@@ -50,7 +50,8 @@ for m = 0:M-1 % channel index
         index_end=index_start+nfft-1;
         x_window=x(index_start:index_end,m+1).*window;
         X_fft=fft(x_window,nfft);
-        X(:,l+1,m+1)=X_fft(1:N_half).*G_half(:,m+1);
+%         X(:,l+1,m+1)=X_fft(1:N_half).*G_half(:,m+1);
+        X(:,l+1,m+1)=X_fft(1:N_half);
         %temp=X_fft.*G(:,m+1); %equivalent with line 51
         %X(:,l+1,m+1)=temp(1:N_half); %equivalent too
         
