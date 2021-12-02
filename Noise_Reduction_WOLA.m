@@ -26,12 +26,13 @@ load HRTF
     % hyperparameters
     speech_filename='audio_files/speech1.wav';
     noise_filename='audio_files/Babble_noise1.wav';
+    % noise_filename='audio_files/White_noise1.wav';
     fs_resample=fs_RIR;
     RIR_length=200;
     speech_length=5; % seconds
     noise_length=speech_length; % seconds
     SNR_correlated_noise=5; % in dB
-    SNR_uncorrelated_noise=30; % in dB
+    SNR_uncorrelated_noise=10; % in dB
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     % generate speech signal
     [speech_raw,fs_speech]=audioread(speech_filename);
@@ -75,22 +76,33 @@ time = 0:1/fs:((length(speech)-1)/fs);
 clow = -60; chigh = 10; % lower and upper limits for signal power in spectrogram (can change for different resolutions)
 [N_freqs, N_frames] = size(y_STFT(:,:,1));
 
-% figure; 
-% subplot(2,1,1);
-% imagesc(time, f/1000, mag2db(abs(x_STFT(:,:,1))), [clow, chigh]); colorbar; 
-% axis xy; set(gca,'fontsize', 14);
-% set(gcf,'color','w'); xlabel('Time Frame'); ylabel('Frequency (kHz)')
-% title('Observed Spectrogram of Noisy Mic'); hold on;
+
 
 % ## Compute the Speech Presence Probability on the reference microphone
 % (you can try the speech-only signal or the noisy-speech in one of the microphones)
 % Use the attached spp_calc.m function
 
 [noisePowMat, SPP] = spp_calc(speech(:,1),nfft,nfft/noverlap);% To complete
-
+figure; 
+subplot(2,1,1);
+imagesc(time, f/1000, mag2db(abs(x_STFT(:,:,1))), [clow, chigh]); colorbar; 
+axis xy; set(gca,'fontsize', 14);
+set(gcf,'color','w'); xlabel('Time Frame'); ylabel('Frequency (kHz)')
+title('Observed Spectrogram of Noisy Mic'); hold on;
 % Observe the SPP
-% subplot(2,1,2); imagesc(1:N_frames,f,SPP); colorbar; axis xy; set(gcf,'color','w');  
-% set(gca,'Fontsize',14), xlabel('Time Frames'), ylabel('Frequency (Hz)'), title('Speech Presence Probability for ref mic');
+subplot(2,1,2); imagesc(1:N_frames,f,SPP); colorbar; axis xy; set(gcf,'color','w');  
+set(gca,'Fontsize',14), xlabel('Time Frames'), ylabel('Frequency (Hz)'), title('Speech Presence Probability for ref mic');
+
+[noisePowMat, SPP] = spp_calc(y_TD(:,1),nfft,nfft/noverlap);% To complete
+figure; 
+subplot(2,1,1);
+imagesc(time, f/1000, mag2db(abs(y_STFT(:,:,1))), [clow, chigh]); colorbar; 
+axis xy; set(gca,'fontsize', 14);
+set(gcf,'color','w'); xlabel('Time Frame'); ylabel('Frequency (kHz)')
+title('Observed Spectrogram of Noisy Mic'); hold on;
+% Observe the SPP
+subplot(2,1,2); imagesc(1:N_frames,f,SPP); colorbar; axis xy; set(gcf,'color','w');  
+set(gca,'Fontsize',14), xlabel('Time Frames'), ylabel('Frequency (Hz)'), title('Speech Presence Probability for ref mic');
 
 %%  Exercise 3.2: ## Implementation of the MWF
 num_mics = 2;
@@ -146,7 +158,7 @@ for l=2:N_frames % Time index
             if(max(abs(W_update)) < 2.2)  % This will skip some initial frames
                 W_mvdr_mwfL(:,k,m) =W_update;
             end
-            % W_mvdr_mwfL(:,k) = W_update;% Final expression for filter
+            % W_mvdr_mwfL(:,k) = W_update; % Final expression for filter
         
             % Filtering the noisy speech, the speech-only, and the noise-only.
             S_mvdr_mwfL_stft(k,l,m) = W_mvdr_mwfL(:,k,m)'* Y_kl(1:num_mics);
@@ -185,3 +197,14 @@ subplot(3,1,3);plot(speech,'color','b');hold on;plot(x_mwfL,'color','r');title('
 SNR_in = snr(y_TD(:,1),noise(:,1)); % Compute input SNR
 SNR_out = snr(s_mwfL(:,1),n_mwfL(:,1));% Compute output SNR
 fprintf("Input SNR is %d and output SNR is %d.\n",SNR_in,SNR_out);
+
+[noisePowMat, SPP] = spp_calc(x_mwfL(:,1),nfft,nfft/noverlap);% To complete
+figure; 
+subplot(2,1,1);
+imagesc(time, f/1000, mag2db(abs(S_mvdr_mwfL_stft(:,:,1))), [clow, chigh]); colorbar; 
+axis xy; set(gca,'fontsize', 14);
+set(gcf,'color','w'); xlabel('Time Frame'); ylabel('Frequency (kHz)')
+title('Observed Spectrogram of Noisy Mic'); hold on;
+% Observe the SPP
+subplot(2,1,2); imagesc(1:N_frames,f,SPP); colorbar; axis xy; set(gcf,'color','w');  
+set(gca,'Fontsize',14), xlabel('Time Frames'), ylabel('Frequency (Hz)'), title('Speech Presence Probability for ref mic');
