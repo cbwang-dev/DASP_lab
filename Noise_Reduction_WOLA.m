@@ -208,3 +208,5 @@ title('Observed Spectrogram of Noisy Mic'); hold on;
 % Observe the SPP
 subplot(2,1,2); imagesc(1:N_frames,f,SPP); colorbar; axis xy; set(gcf,'color','w');  
 set(gca,'Fontsize',14), xlabel('Time Frames'), ylabel('Frequency (Hz)'), title('Speech Presence Probability for ref mic');
+
+% note: change the place of npoise mic and see what is going on
