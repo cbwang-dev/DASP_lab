@@ -8,6 +8,7 @@
 % Use MySA_GUI load /GUI_setups/1_4.mat first before experiment!!!
 
 clear;
+clearvars;
 % close all
 
 % Load ATFs
@@ -17,7 +18,7 @@ load Computed_RIRs
 load HRTF 
 
 % Define the signal length
-siglength = 5;
+siglength = 10;
 
 % Load the speech signal and resample
 flag_resample_8k = 0;

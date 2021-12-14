@@ -11,7 +11,7 @@ close all;
 % Load RIRs
 load Computed_RIRs.mat
 M = 150;  % Length of secondary path (RIR)
-L = 600;  % Adaptive filter length
+L = 400;  % Adaptive filter length
 p = RIR_noise(1:1000,1);
 h = RIR_sources(1:M,1,1); % choose first loud speaker
 

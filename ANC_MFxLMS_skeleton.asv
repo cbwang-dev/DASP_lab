@@ -47,7 +47,7 @@ d = [d1 d2];
 addBinSig = 1;
 
 if addBinSig
-    load ("session1.mat", "g");
+    load ("session1.mat");
     % read in the speech signal
     [speech_raw,fs_speech]=audioread(speech_filename);
     speech_raw=speech_raw(1:fs_speech*sigLenSec);
@@ -174,7 +174,7 @@ if addBinSig
     figure(3);
     
     subplot(2,1,1)
-    plot(d(:,1)+binaural_sig(:,1), 'DisplayName', "noise + speech left");
+    plot(d(:,1)+binaural_signal(:,1), 'DisplayName', "noise + speech left");
     hold on;
     plot(e(:,1), 'DisplayName', "error");
     title("d-e channel 1")
@@ -182,7 +182,7 @@ if addBinSig
     legend;
     
     subplot(2,1,2)
-    plot(d(:,2)+binaural_sig(:,2), 'DisplayName', "noise +speech right");
+    plot(d(:,2)+binaural_sign(:,2), 'DisplayName', "noise +speech right");
     hold on;
     plot(e(:,2), 'DisplayName', "error");
     title("d-e channel 2")
