@@ -89,7 +89,7 @@ tic
 %%
 for n = L+M:sigLenSample
     if mod(n, 1000) == 0
-        disp(n);
+        fprintf("%d out of %d\n",n,sigLenSample)
     end
     x_old=flip(x(n-L-M+2:n));
     X_Hmat=hankel(x_old(1:M),x_old(M:end));
@@ -146,8 +146,8 @@ end
 E_e = mean( e(round(0.3*sigLenSample):end,:) ); % approximate E(e), by taking the mean of 90% last values of e
 E_d = mean( d(round(0.3*sigLenSample):end,:) ); % approximate E(d), by taking the mean of 90% last values of d
 
-C1 = 10*log10((E_e(:,1).^2) ./ (E_d(:,1).^2))
-C2 = 10*log10((E_e(:,2).^2) ./ (E_d(:,2).^2))
+C1 = 10*log10((E_e(:,1).^2) ./ (E_d(:,1).^2));
+C2 = 10*log10((E_e(:,2).^2) ./ (E_d(:,2).^2));
 
 %%
 % In the existing plot of the noisy signals, superimpose the corresponding
