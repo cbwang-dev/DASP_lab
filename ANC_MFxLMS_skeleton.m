@@ -107,8 +107,8 @@ for n = L+M:sigLenSample
         y_speech1 = (g' * Speech_Hmat)';
         y_speech2 = y_speech1;
          
-        binaural_sig(n, 1) = y_h1 + sum(h1'.* y_speech1', 'all');
-        binaural_sig(n, 2) = y_h2 + sum(h2'.* y_speech2', 'all');
+        binaural_sig(n, 1) = sum(h1'.* y_speech1', 'all');
+        binaural_sig(n, 2) = sum(h2'.* y_speech2', 'all');
         
     end
 
@@ -132,7 +132,7 @@ toc
 if addBinSig
     T = min(5, sigLenSec);
     sig = binaural_sig(1: fs_resample*T)';
-    n = noise(1: fs_resample*T);
+    n = d(1: fs_resample*T, 1);
     SNR = snr(sig(:,1), n);
     k = 10^(SNR/20);
     binaural_sig = binaural_sig / k;
@@ -157,39 +157,40 @@ figure(2);
 subplot(2,1,1)
 plot(d(:,1), 'DisplayName', "noise ");
 hold on;
-plot(e(:,1), 'DisplayName', "received signal");
-title("noise and received signal channel 1")
+plot(e(:,1), 'DisplayName', "filtered signal");
+title("noise and filtered signal channel 1")
 hold off;
 legend;
 
 subplot(2,1,2)
 plot(d(:,2), 'DisplayName', "noise");
 hold on;
-plot(e(:,2), 'DisplayName', "received signal");
-title("noise and received signal channel 2")
+plot(e(:,2), 'DisplayName', "filtered signal");
+title("noise and filtered signal channel 2")
 hold off;
 
 if addBinSig
     figure(3);
     
-    subplot(2,1,1)
-    plot(d(:,1)+speech, 'DisplayName', "noise");
+    subplot(2,1,1)   
+    plot(d(:,1)+binaural_sig(:,1), 'DisplayName', "noise+speech");
     hold on;
-    plot(d(:,1)+binaural_sig(:,1), 'DisplayName', "received signal");
-    title("noise and received signal channel 1")
+    plot(e(:,1) + binaural_sig(:,1), 'DisplayName', "filtered signal");
+
+    title("noise and filtered signal channel 1")
     hold off;
     legend;
     
     subplot(2,1,2)
-    plot(d(:,2)+speech, 'DisplayName', "noise");
+    plot(d(:,2)+binaural_sig(:,2), 'DisplayName', "noise+speech");
     hold on;
-    plot(d(:,1)+binaural_sig(:,1), 'DisplayName', "received signal");
-    title("noise and received signal channel 2")
+    plot(e(:,2)+binaural_sig(:,2), 'DisplayName', "filtered signal");
+    title("noise and filtered signal channel 2")
     hold off;
 end
 
 %%
-listen = 1;
+listen = 0;
 if listen
     disp("Playing speech:"); soundsc(speech, fs_resample); pause;
     disp("Playing noise:"); soundsc(d, fs_resample); pause;
