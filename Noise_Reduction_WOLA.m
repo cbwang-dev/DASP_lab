@@ -25,8 +25,8 @@ load HRTF
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     % hyperparameters
     speech_filename='audio_files/speech1.wav';
-    noise_filename='audio_files/Babble_noise1.wav';
-    % noise_filename='audio_files/White_noise1.wav';
+%     noise_filename='audio_files/Babble_noise1.wav';
+    noise_filename='audio_files/White_noise1.wav';
     fs_resample=fs_RIR;
     RIR_length=200;
     speech_length=5; % seconds
@@ -87,15 +87,15 @@ clow = -60; chigh = 10; % lower and upper limits for signal power in spectrogram
 
 [noisePowMat, SPP] = spp_calc(speech(:,1),nfft,nfft/noverlap); % To complete
 
-% figure; 
-% subplot(2,1,1);
-% imagesc(time, f/1000, mag2db(abs(x_STFT(:,:,1))), [clow, chigh]); colorbar; 
-% axis xy; set(gca,'fontsize', 14);
-% set(gcf,'color','w'); xlabel('Time Frame'); ylabel('Frequency (kHz)')
-% title('Observed Spectrogram of Noisy Mic'); hold on;
-% % Observe the SPP
-% subplot(2,1,2); imagesc(1:N_frames,f,SPP); colorbar; axis xy; set(gcf,'color','w');  
-% set(gca,'Fontsize',14), xlabel('Time Frames'), ylabel('Frequency (Hz)'), title('Speech Presence Probability for ref mic (evaluated on the real speech signal)');
+figure; 
+subplot(2,1,1);
+imagesc(time, f/1000, mag2db(abs(x_STFT(:,:,1))), [clow, chigh]); colorbar; 
+axis xy; set(gca,'fontsize', 14);
+set(gcf,'color','w'); xlabel('Time Frame'); ylabel('Frequency (kHz)')
+title('Observed Spectrogram of Noisy Mic'); hold on;
+% Observe the SPP
+subplot(2,1,2); imagesc(1:N_frames,f,SPP); colorbar; axis xy; set(gcf,'color','w');  
+set(gca,'Fontsize',14), xlabel('Time Frames'), ylabel('Frequency (Hz)'), title('Speech Presence Probability for ref mic (evaluated on the real speech signal)');
 
 % [noisePowMat, SPP] = spp_calc(y_TD(:,1),nfft,nfft/noverlap);% To complete
 % figure; 
@@ -114,7 +114,7 @@ num_mics = 2;
 Rnn = cell(N_freqs,1);  Rnn(:) = {1e-6*ones(num_mics,num_mics)};      % Noise Only (NO) corr. matrix. Initialize to small random values
 Ryy = cell(N_freqs,1);  Ryy(:) = {1e-6*ones(num_mics,num_mics)};      % Speech + Noise (SPN) corr. matrix. Initialize to small random values
 lambda = 0.995;                                                       % Forgetting factors for correlation matrices - can change
-SPP_thr = 0.95;                                                       % Threshold for SPP - can change
+SPP_thr = 0.9;                                                       % Threshold for SPP - can change
 
 % For MWF filter for left ear
 S_mvdr_mwfL_stft = zeros(N_freqs,N_frames,num_mics);         
