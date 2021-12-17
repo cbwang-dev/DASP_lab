@@ -8,7 +8,7 @@
 % (3) Compute input/output SNRs and SNR improvement
 % (4) Implement the filter for left and right ears. Hear the synthesised signal
 
-% clearvars;
+clearvars;
 close all;
 % Load RIRs
 load ("Computed_RIRs.mat")
@@ -56,7 +56,6 @@ if addBinSig
     g = reshape(g, [], J);
     Lg = size(g, 1);
 
-    % soundsc(speech, fs_resample);
     binaural_sig = zeros(sigLenSample, 2);
 
 end
@@ -156,35 +155,44 @@ C2 = 10*log10((E_e(:,2).^2) ./ (E_d(:,2).^2));
 figure(2);
 
 subplot(2,1,1)
-plot(d(:,1), 'DisplayName', "noise left");
+plot(d(:,1), 'DisplayName', "noise ");
 hold on;
-plot(e(:,1), 'DisplayName', "error");
-title("d-e channel 1")
+plot(e(:,1), 'DisplayName', "received signal");
+title("noise and received signal channel 1")
 hold off;
 legend;
 
 subplot(2,1,2)
-plot(d(:,2), 'DisplayName', "noise right");
+plot(d(:,2), 'DisplayName', "noise");
 hold on;
-plot(e(:,2), 'DisplayName', "error");
-title("d-e channel 2")
+plot(e(:,2), 'DisplayName', "received signal");
+title("noise and received signal channel 2")
 hold off;
 
 if addBinSig
     figure(3);
     
     subplot(2,1,1)
-    plot(d(:,1)+binaural_sig(:,1), 'DisplayName', "noise + speech left");
+    plot(d(:,1)+speech, 'DisplayName', "noise");
     hold on;
-    plot(e(:,1), 'DisplayName', "error");
-    title("d-e channel 1")
+    plot(d(:,1)+binaural_sig(:,1), 'DisplayName', "received signal");
+    title("noise and received signal channel 1")
     hold off;
     legend;
     
     subplot(2,1,2)
-    plot(d(:,2)+binaural_sig(:,2), 'DisplayName', "noise +speech right");
+    plot(d(:,2)+speech, 'DisplayName', "noise");
     hold on;
-    plot(e(:,2), 'DisplayName', "error");
-    title("d-e channel 2")
+    plot(d(:,1)+binaural_sig(:,1), 'DisplayName', "received signal");
+    title("noise and received signal channel 2")
     hold off;
+end
+
+%%
+listen = 1;
+if listen
+    disp("Playing speech:"); soundsc(speech, fs_resample); pause;
+    disp("Playing noise:"); soundsc(d, fs_resample); pause;
+    disp("Playing received signal:"); soundsc(d+binaural_sig, fs_resample); pause;
+
 end
